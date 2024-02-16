@@ -1,0 +1,13 @@
+@media (max-width: 768px) {
+    .hero-image-container {
+      display: none;
+    }
+  }
+  
+@media (max-width: 768px) {
+    .container.mx-auto.px-4 {
+      padding-top: 2rem; /* Adjust the padding top value as needed */
+      padding-bottom: 2rem; /* Adjust the padding bottom value as needed */
+    }
+  }
+  

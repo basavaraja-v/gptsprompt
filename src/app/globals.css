@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Example in globals.css - tweak as needed */
+.container { 
+  max-width: 100%; /* Fluid Width */
+}
+
+@media (min-width: 768px) { /* Example Medium Screen Adjustment */ 
+  .container {
+    max-width: 1200px; /* Fixed width at larger sizes */
+  }
+} 
+
+.custom-background {
+  background-color: rgba(30,19,15,255);
+}
+
+.hero-image-container { /* Give your image container a class */
+  margin-top: -10px;  /* Adjust as needed */
+  margin-left: 50px; /* Adjust as needed */
+  box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+
+.gradient-text {
+  background: linear-gradient(to right, #f00, #ff0, #0f0, #0ff, #00f, #f0f); /* Customize Gradient  */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradient-shift 5s infinite alternate; 
+}
+
+@keyframes gradient-shift {
+  0%  { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+.gradient-button {
+  background: linear-gradient(to right, #00f, #f0f); /* Customize Gradient  */
+  color: white; /* Ensure good contrast */
+ /* Other button styles (padding, border-radius, etc.) */
+}
+
+.custom-text {
+  color: rgba(21, 32, 38, 1);
+}
