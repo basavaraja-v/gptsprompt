@@ -68,7 +68,7 @@ const ChallengeCard = ({ id, title, description, difficulty, category, status }:
 
   return (
     <div className="bg-white rounded-lg shadow-md p-4 max-w-sm relative overflow-hidden">
-      <div className={`absolute top-0 left-0 transform -translate-x-1/2 bg-${status === 'O' ? 'green' : 'red'}-500 text-white font-bold py-1 px-2 rounded-full text-xs`} style={{ transform: 'rotate(-45deg)', zIndex: 1 }}>
+      <div className={`absolute top-0 left-0 transform -translate-x-1/2 ${status === 'O' ? 'bg-green-500' : 'bg-red-500'} text-white font-bold py-1 px-2 rounded-full text-xs`} style={{ transform: 'rotate(-45deg)', zIndex: 1 }}>
         {status === 'O' ? 'Open' : 'Closed'}
       </div>
 
