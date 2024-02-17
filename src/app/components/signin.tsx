@@ -92,7 +92,7 @@ const Signin: React.FC<SigninProps> = ({ onSuccess, onSignupClick }) => {
                 </button>
             </form>
             <p className="mt-2 text-gray-600">
-                Don't have an account?{' '}
+                Don&apos;t have an account?{' '}
                 <a href="#" onClick={handleSignupClick} className="text-blue-500 underline">Sign up</a>
             </p>
         </div>
