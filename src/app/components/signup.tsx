@@ -67,7 +67,8 @@ const Signup: React.FC<SignupProps> = ({ onSuccess }) => {
             await setDoc(userDocRef, {
                 displayName: formData.displayName,
                 user_name: formData.user_name,
-                email_id: formData.email_id
+                email_id: formData.email_id,
+                user_access: 'U'
             });
 
             // Reset form fields

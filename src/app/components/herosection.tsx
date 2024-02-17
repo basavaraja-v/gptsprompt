@@ -2,10 +2,10 @@ import Image from 'next/image';
 
 const HeroSection = () => {
     return (
-        <section className="custom-background text-white">
+        <section className="custom-background text-white py-8 md:py-16">
             <div className="container mx-auto px-4 flex flex-col md:flex-row items-center">
                 <div className="md:w-1/2 mb-6 md:mb-0">
-                    <h1 className="text-4xl font-bold mb-4 gradient-text">GPTS Prompt: Master AI Creation</h1>
+                    <h1 className="text-3xl md:text-4xl font-bold mb-4 gradient-text">GPTS Prompt: Master AI Creation</h1>
                     <p className="text-lg mb-4">Discover exciting prompts, share results, and collaborate with the AI prompt engineering community.</p>
                     <p className="text-base">Unleash your creativity and explore the ever-evolving world of AI art and text generation.</p>
                     <br />
@@ -16,8 +16,8 @@ const HeroSection = () => {
                 </div>
 
                 <div className="md:w-1/2">
-                    <div className="w-full rounded-lg overflow-hidden hero-image-container hidden md:block">
-                        <div className="relative w-full" style={{ height: '400px', paddingBottom: '100%' }}>
+                    <div className="w-full rounded-lg overflow-hidden hero-image-container hidden md:block" style={{ maxWidth: '400px' }}>
+                        <div className="relative w-full" style={{ paddingBottom: '75%' }}>
                             <Image
                                 src="/hero-image-new.png"
                                 alt="Hero Illustration"

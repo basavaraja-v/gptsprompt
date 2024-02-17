@@ -7,6 +7,7 @@ interface User {
     uid: string;
     email: string;
     displayName: string;
+    user_access: string;
 }
 
 const useAuth = () => {
@@ -16,25 +17,25 @@ const useAuth = () => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
             if (authUser) {
-                console.log('User ID:', authUser.uid);
                 const db = getFirestore();
                 const userRef = doc(db, 'users', authUser.uid);
                 const userSnapshot = await getDoc(userRef);
-                console.log('User snapshot exists:', userSnapshot.exists());
-
                 const userData = userSnapshot.data();
                 if (userData) {
 
                     setUser({
                         uid: authUser.uid,
                         email: authUser.email || '',
-                        displayName: userData.displayName || ''
+                        displayName: userData.displayName || '',
+                        user_access: userData.user_access || 'U'
+
                     });
                 } else {
                     setUser({
                         uid: authUser.uid,
                         email: authUser.email || '',
-                        displayName: ''
+                        displayName: '',
+                        user_access: 'U',
                     });
                 }
             } else {

@@ -10,10 +10,9 @@ import Signin from './signin';
 import { auth } from '../firebase/config';
 
 const Header = () => {
-    const { user, loading } = useAuth(); // Use the custom hook to check authentication state
+    const { user } = useAuth(); // Use the custom hook to check authentication state
     const [showAuthModal, setShowAuthModal] = useState(false);
     const [activeTab, setActiveTab] = useState<'signin' | 'signup'>('signin'); // Default to signin tab
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // Track whether the user is logged in
     const [isDrawerOpen, setIsDrawerOpen] = useState(false); // Track whether the drawer is open
 
     const toggleAuthModal = () => {
@@ -23,7 +22,6 @@ const Header = () => {
 
     const handleAuthSuccess = () => {
         setShowAuthModal(false); // Close the modal upon successful sign-up or sign-in
-        setIsLoggedIn(true); // Set isLoggedIn to true
     };
 
     const toggleDrawer = () => {
@@ -54,6 +52,14 @@ const Header = () => {
                             // If user is signed in, show the username and sign-out button
                             <div className="flex items-center">
                                 <p className="mr-4">Hello, {user.displayName}</p>
+                                {user.user_access === 'A' && ( // Check user_access
+                                    <button
+                                        className="gradient-button px-4 py-2 rounded-md font-medium border border-gray-300 hover:bg-gray-100"
+                                        onClick={() => { }} // Add your logic for "Add Challenge" here
+                                    >
+                                        <Link href={'/addchallenge'}> Add Challenge </Link>
+                                    </button>
+                                )}
                                 <button
                                     className="gradient-button px-4 py-2 rounded-md font-medium border border-gray-300 hover:bg-gray-100"
                                     onClick={() => signOut(auth)}
@@ -87,6 +93,14 @@ const Header = () => {
 
                                     <p className="mr-4">Hello, {user.displayName}</p>
                                     <br />
+                                    {user.user_access === 'A' && ( // Check user_access
+                                        <button
+                                            className="gradient-button px-4 py-2 rounded-md font-medium border border-gray-300 hover:bg-gray-100"
+                                            onClick={() => { }} // Add your logic for "Add Challenge" here
+                                        >
+                                            Add Challenge
+                                        </button>
+                                    )}
                                     <button
                                         className="gradient-button px-4 py-2 rounded-md font-medium border border-gray-300 hover:bg-gray-100"
                                         onClick={() => signOut(auth)}
@@ -153,3 +167,4 @@ const Header = () => {
 };
 
 export default Header;
+

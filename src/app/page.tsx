@@ -1,9 +1,9 @@
-import Layout from './layout'; 
-import Home from '../app/pages/home_page';
+import Layout from './layout';
+import Home from './home_page';
 
 const Page = () => (
   <Layout>
-    <Home /> 
+    <Home />
   </Layout>
 );
 

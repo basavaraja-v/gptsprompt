@@ -1,55 +1,140 @@
-import Image from 'next/image';
+import React, { useState } from 'react';
+import useAuth from '../hooks/useauth'; // Assuming you have a hook named useAuth
+import { addDoc, collection, getFirestore } from 'firebase/firestore';
+import { app } from '../firebase/config';
+import Link from 'next/link';
 
 interface ChallengeCardProps {
-  challenge: {
-    id: number;
-    prompt: string;
-    imageUrl?: string; // Image can be optional
-    difficulty?: string; // 'Easy', 'Medium', 'Hard', etc.  
-  };
+  id: string;
+  title: string;
+  description: string;
+  difficulty: string;
+  category: string;
+  status: string;
 }
 
-const ChallengeCard = ({ challenge }: ChallengeCardProps) => {
+const ChallengeCard = ({ id, title, description, difficulty, category, status }: ChallengeCardProps) => {
+  const { user } = useAuth(); // Obtain user once at the beginning of the component
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [prompt, setPrompt] = useState('');
+  const [promptType, setPromptType] = useState('');
+
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSubmit = async () => {
+    // Ensure user is authenticated
+    if (!user) {
+      console.error('Authentication state is not yet resolved or user is not signed in.');
+      // Optionally, you can display a loading indicator or a message to the user
+      return;
+    }
+
+    // Validate prompt and promptType here if needed
+
+    try {
+      // Add the prompt to the 'challenge_prompts' collection
+      const db = getFirestore(app);
+      await addDoc(collection(db, 'challenge_prompts'), {
+        challengeId: id,
+        userId: user.uid,
+        prompt: prompt,
+        promptType: promptType,
+        createdAt: new Date(),
+        upvotes: 0
+      });
+
+      // Close the modal after successful submission
+      setIsModalOpen(false);
+
+      // Reset prompt and promptType if needed
+      setPrompt('');
+      setPromptType('');
+
+      // Optionally, you can add further actions such as showing a success message
+      console.log('Prompt submitted successfully!');
+    } catch (error) {
+      // Handle errors
+      console.error('Error adding prompt:', error);
+      // Optionally, you can display an error message to the user
+    }
+  };
+
+
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden">
-      {/* Image Handling */}
-      {challenge.imageUrl ? (
-        <Image 
-          src={challenge.imageUrl} 
-          alt={challenge.prompt} 
-          width={300} // Adjust as needed
-          height={200} 
-          layout="responsive" // Or fixed if you prefer
-          className="object-cover" 
-        />
-      ) : (
-        <div className="bg-gray-200 h-64"> 
-           {/* Placeholder if no image */} 
-        </div>
-      )}
-
-      {/* Challenge Info */}
-      <div className="p-4">
-        <h3 className="text-lg font-medium mb-2">{challenge.prompt}</h3>
-
-        {/* Difficulty Indicator (if available) */}
-        {challenge.difficulty && (
-          <span 
-            className={`inline-block px-3 py-1 text-sm rounded 
-                      ${challenge.difficulty === 'Easy' ? 'bg-green-100 text-green-800' 
-                        : challenge.difficulty === 'Medium' ? 'bg-yellow-100 text-yellow-800'
-                        : 'bg-red-100 text-red-800'}`}  
-          >
-            {challenge.difficulty}
-          </span>
-        )}
-
-    
-          <a href={`/challenges/${challenge.id}`} className="block mt-3 bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded">
-            View Challenge
-          </a>
+    <div className="bg-white rounded-lg shadow-md p-4 max-w-sm relative overflow-hidden">
+      <div className={`absolute top-0 left-0 transform -translate-x-1/2 bg-${status === 'O' ? 'green' : 'red'}-500 text-white font-bold py-1 px-2 rounded-full text-xs`} style={{ transform: 'rotate(-45deg)', zIndex: 1 }}>
+        {status === 'O' ? 'Open' : 'Closed'}
       </div>
-    </div>
+
+      <div className="p-2">
+        <h3 className="text-lg font-medium">{title}</h3>
+        <p className="text-gray-600">{description}</p>
+      </div>
+
+      <div className="flex items-center justify-between mt-4">
+        <div>
+          <div className="flex items-center space-x-2">
+            <span className="bg-gray-200 px-2 py-1 rounded-full text-xs">{difficulty}</span>
+            <span className="bg-gray-200 px-2 py-1 rounded-full text-xs">{category}</span>
+          </div>
+        </div>
+      </div>
+
+
+      <div className="mt-4 flex items-center justify-between">
+        {user && status === 'O' && (<button onClick={handleModalOpen} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+          Submit Prompt
+        </button>
+        )}
+        <Link href={`/submissions/${id}`}>
+          <button className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+            View Submissions
+          </button>
+        </Link>
+      </div>
+
+      {
+        isModalOpen && (
+          <div className="fixed z-10 inset-0 overflow-y-auto flex justify-center items-center bg-black bg-opacity-50">
+            <div className="bg-white rounded-lg overflow-hidden shadow-xl p-6 sm:mx-auto sm:w-full sm:max-w-lg">
+              <h2 className="text-xl font-semibold mb-4">Submit Prompt</h2>
+              <div className="mb-4">
+                <label htmlFor="prompt" className="block text-gray-700 text-sm font-bold mb-2">Prompt:</label>
+                <input type="text" id="prompt" name="prompt" value={prompt} onChange={(e) => setPrompt(e.target.value)} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" placeholder="Enter prompt" />
+              </div>
+              <div className="mb-4">
+                <label htmlFor="promptType" className="block text-gray-700 text-sm font-bold mb-2">Prompt Type:</label>
+                <select
+                  id="promptType"
+                  name="promptType"
+                  value={promptType}
+                  onChange={(e) => setPromptType(e.target.value)}
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                >
+                  <option value="">Select Prompt Type</option>
+                  <option value="ChatGPT">ChatGPT</option>
+                  <option value="Gemini">Gemini</option>
+                </select>
+              </div>
+              <div className="flex justify-end">
+                <button onClick={handleSubmit} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+                  Submit
+                </button>
+                <button onClick={handleModalClose} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )
+      }
+    </div >
   );
 };
 
