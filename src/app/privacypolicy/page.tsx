@@ -17,7 +17,7 @@ const PrivacyPolicy = () => {
                     <section className="mb-8">
                         <h2 className="text-xl font-semibold mb-4">Introduction</h2>
                         <p>
-                            At GPTS Prompt, we respect your privacy. This policy outlines the types of personal information we collect, how it's used, and your choices regarding your data.
+                            At GPTS Prompt, we respect your privacy. This policy outlines the types of personal information we collect, how it&apos;s used, and your choices regarding your data.
                         </p>
                     </section>
 
@@ -53,7 +53,7 @@ const PrivacyPolicy = () => {
                     </section>
 
                     <section className="mb-8">
-                        <h2 className="text-xl font-semibold mb-4">Children's Privacy</h2>
+                        <h2 className="text-xl font-semibold mb-4">Children&apos;s Privacy</h2>
                         <p>Our website is not intended for children under 13. We do not knowingly collect data from children under this age.</p>
                     </section>
 
