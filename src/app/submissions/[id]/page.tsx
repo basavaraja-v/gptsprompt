@@ -91,7 +91,7 @@ const SubmissionsPage = () => {
     return (
         <div className="bg-gray-100 min-h-screen">
             <div className="container mx-auto px-4 py-8">
-                <h2 className="text-3xl font-bold mb-8">Submissions for The Challenge</h2>
+                <h2 className="text-3xl font-bold mb-4 text-gray-900 border-b-4 border-blue-500 pb-2">Submissions for The Challenge</h2> {/* Adjusted text color */}
                 {loading ? (
                     <div className="text-center mt-8">Loading...</div>
                 ) : prompts.length === 0 ? (
@@ -100,7 +100,7 @@ const SubmissionsPage = () => {
                     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                         {prompts.map((prompt) => (
                             <div key={prompt.id} className="bg-white shadow-md rounded-md p-4">
-                                <p className="text-lg font-semibold mb-2">{prompt.prompt}</p>
+                                <p className="text-lg font-semibold mb-2 text-gray-800">{prompt.prompt}</p> {/* Adjusted text color */}
                                 <div className="text-sm text-gray-600 mb-2">By: @{prompt.user.user_name} ({prompt.user.displayName})</div>
                                 <div className="text-sm text-gray-600 mb-2">Type: {prompt.promptType}</div> {/* Displaying promptType */}
                                 <div className="flex items-center">
