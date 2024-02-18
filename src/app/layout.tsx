@@ -6,7 +6,7 @@ import { Analytics } from '@vercel/analytics/react';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "GPTS Prompt - Your AI Prompt Playground",
+  title: "GPTS Prompt - Your Prompt Engineer Community",
   description: "Discover unique AI prompts, collaborate with the community, and level up your prompt engineering skills.",
 };
 
@@ -17,6 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/favicon.ico" />
+      </head>
       <body className={inter.className}>
         {children}
         <Analytics />
