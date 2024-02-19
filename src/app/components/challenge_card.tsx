@@ -3,6 +3,8 @@ import useAuth from '../hooks/useauth'; // Assuming you have a hook named useAut
 import { addDoc, collection, getFirestore } from 'firebase/firestore';
 import { app } from '../firebase/config';
 import Link from 'next/link';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface ChallengeCardProps {
   id: string;
@@ -22,6 +24,10 @@ const ChallengeCard = ({ id, title, description, difficulty, category, status }:
   const [promptTypeError, setPromptTypeError] = useState('');
 
   const handleModalOpen = () => {
+    if (!user) {
+      toast.info('Please Login to submit prompt')
+      return
+    }
     setIsModalOpen(true);
   };
 
@@ -65,7 +71,7 @@ const ChallengeCard = ({ id, title, description, difficulty, category, status }:
         createdAt: new Date(),
         upvotes: 0
       });
-
+      toast.success('Prompt submitted successfully!')
       // Close the modal after successful submission
       setIsModalOpen(false);
 
@@ -103,7 +109,7 @@ const ChallengeCard = ({ id, title, description, difficulty, category, status }:
       </div>
 
       <div className="mt-4 flex items-center justify-between">
-        {user && status === 'O' && (<button onClick={handleModalOpen} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
+        {status === 'O' && (<button onClick={handleModalOpen} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">
           Submit Prompt
         </button>
         )}
@@ -149,6 +155,18 @@ const ChallengeCard = ({ id, title, description, difficulty, category, status }:
           </div>
         </div>
       )}
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        toastStyle={{ margin: "auto" }} // Center the toast notifications
+      />
     </div>
   );
 };

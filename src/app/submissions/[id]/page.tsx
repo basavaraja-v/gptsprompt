@@ -5,6 +5,8 @@ import { app } from '../../firebase/config'; // Assuming your Firebase configura
 import { getFirestore, collection, getDocs, where, doc, getDoc, updateDoc, increment, query, arrayUnion } from 'firebase/firestore';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import useAuth from '../../hooks/useauth'; // Assuming you have a hook named useAuth
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface Prompt {
     id: string;
@@ -35,7 +37,7 @@ const SubmissionsPage = () => {
                         upvotes: increment(1),
                         upvote_users: arrayUnion(userId)
                     });
-                    alert('Upvoted!')
+                    toast.success('Upvoted!')
                 }
             }
         } catch (err) {
@@ -105,7 +107,7 @@ const SubmissionsPage = () => {
                                 <div className="text-sm text-gray-600 mb-2">By: @{prompt.user.user_name} ({prompt.user.displayName})</div>
                                 <div className="text-sm text-gray-600 mb-2">Type: {prompt.promptType}</div>
                                 <div className="flex items-center">
-                                    <CopyToClipboard text={prompt.prompt} onCopy={() => alert('Copied!')}>
+                                    <CopyToClipboard text={prompt.prompt} onCopy={() => toast.info('Copied!')}>
                                         <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2">Copy</button>
                                     </CopyToClipboard>
                                     <button onClick={() => handleUpvote(prompt.id, prompt.userId)} className="bg-green-500 text-white px-4 py-2 rounded-md">
@@ -117,6 +119,18 @@ const SubmissionsPage = () => {
                     </div>
                 )}
             </div>
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                toastStyle={{ margin: "auto" }} // Center the toast notifications
+            />
         </div>
     );
 };
