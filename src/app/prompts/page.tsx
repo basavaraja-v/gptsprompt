@@ -53,11 +53,24 @@ const PromptsPage = () => {
       if (user) {
         if (user.uid !== userId) {
           const promptRef = doc(db, 'challenge_prompts', promptId);
-          await updateDoc(promptRef, {
-            upvotes: increment(1),
-            upvote_users: arrayUnion(userId)
-          });
-          toast.success('Upvoted!')
+          const promptDoc = await getDoc(promptRef);
+
+          if (promptDoc.exists()) {
+            const promptData = promptDoc.data();
+            const existingUpvoteUsers = promptData.upvote_users || [];
+
+            if (!existingUpvoteUsers.includes(user.uid)) {
+              await updateDoc(promptRef, {
+                upvotes: increment(1),
+                upvote_users: arrayUnion(user.uid)
+              });
+              toast.success('Upvoted!');
+            } else {
+              toast.warning('You have already upvoted this prompt.');
+            }
+          } else {
+            toast.error('Prompt not found.');
+          }
         }
       }
     } catch (err) {
