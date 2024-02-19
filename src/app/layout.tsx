@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "GPTS Prompt - Your Prompt Engineer Community",
-  description: "Discover unique AI prompts, collaborate with the community, and level up your prompt engineering skills.",
+  description: "Prompt engineering is shaping the future of how we interact with technology. We founded GPTs Prompt to cultivate a space where this art form can thrive. Through playful challenges, shared knowledge, and a dash of friendly competition, we're unlocking the potential of AI, one well-crafted prompt at a time.",
 };
 
 export default function RootLayout({

@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import HeroSection from './components/herosection';
 import Challenges from './components/challenges';
-import CommunityHighlights from './components/community_prompts';
+// import CommunityHighlights from './components/community_highlights';
 import Header from './components/header';
 import Footer from './components/footer';
 

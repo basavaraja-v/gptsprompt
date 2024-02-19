@@ -19,7 +19,6 @@ const SubmissionsPage = () => {
     const id = pathname.split('/').pop();
     const [prompts, setPrompts] = useState<Prompt[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    const [copyLabel, setCopyLabel] = useState<string>('Copy');
     const db = getFirestore(app);
     const promptsRef = collection(db, 'challenge_prompts');
     const usersRef = collection(db, 'users');
@@ -81,33 +80,23 @@ const SubmissionsPage = () => {
         return num.toString();
     };
 
-    const handleCopy = () => {
-        setCopyLabel('Copied!');
-        setTimeout(() => {
-            setCopyLabel('Copy');
-        }, 2000);
-    };
-
     return (
         <div className="bg-gray-100 min-h-screen">
             <div className="container mx-auto px-4 py-8">
-                <h2 className="text-3xl font-bold mb-4 text-gray-900 border-b-4 border-blue-500 pb-2">Submissions for The Challenge</h2> {/* Adjusted text color */}
+                <h2 className="text-3xl font-bold mb-4 text-gray-900 border-b-4 border-blue-500 pb-2">Submissions for The Challenge</h2>
                 {loading ? (
                     <div className="text-center mt-8">Loading...</div>
-                ) : prompts.length === 0 ? (
-                    <div className="text-center mt-8">No submissions yet</div>
                 ) : (
                     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                        {prompts.map((prompt) => (
+                        {prompts.map((prompt, index) => (
                             <div key={prompt.id} className="bg-white shadow-md rounded-md p-4">
-                                <p className="text-lg font-semibold mb-2 text-gray-800">{prompt.prompt}</p> {/* Adjusted text color */}
+                                <p className="text-lg font-semibold mb-2 text-gray-800">{prompt.prompt}</p>
                                 <div className="text-sm text-gray-600 mb-2">By: @{prompt.user.user_name} ({prompt.user.displayName})</div>
-                                <div className="text-sm text-gray-600 mb-2">Type: {prompt.promptType}</div> {/* Displaying promptType */}
+                                <div className="text-sm text-gray-600 mb-2">Type: {prompt.promptType}</div>
                                 <div className="flex items-center">
-                                    <CopyToClipboard text={prompt.prompt} onCopy={handleCopy}>
-                                        <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2">{copyLabel}</button>
+                                    <CopyToClipboard text={prompt.prompt} onCopy={() => alert('Copied!')}>
+                                        <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2">Copy</button>
                                     </CopyToClipboard>
-
                                     <button onClick={() => handleUpvote(prompt.id)} className="bg-green-500 text-white px-4 py-2 rounded-md">
                                         Upvote ({formatNumber(prompt.upvotes)})
                                     </button>
@@ -122,3 +111,4 @@ const SubmissionsPage = () => {
 };
 
 export default SubmissionsPage;
+

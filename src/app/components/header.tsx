@@ -47,6 +47,9 @@ const Header = () => {
                         <li className="px-4 py-2 font-medium">
                             <Link href="/challenges">Challenges</Link>
                         </li>
+                        <li className="px-4 py-2 font-medium">
+                            <Link href="/prompts">Prompts</Link>
+                        </li>
 
                         {user ? (
                             // If user is signed in, show the username and sign-out button
