@@ -44,6 +44,16 @@ const PromptsPage = () => {
     return num.toString();
   };
 
+  const handleUpvote = async (promptId: string) => {
+    try {
+      const promptRef = doc(db, 'challenge_prompts', promptId);
+      await updateDoc(promptRef, { upvotes: increment(1) });
+      alert('Upvoted!')
+    } catch (err) {
+      console.error("Upvote Error:", err);
+    }
+  };
+
   useEffect(() => {
     const fetchPrompts = async () => {
       const querySnapshot = await getDocs(promptsRef);
@@ -98,7 +108,7 @@ const PromptsPage = () => {
                     <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2">Copy</button>
                   </CopyToClipboard>
 
-                  <button onClick={() => alert('Upvoted!')} className="bg-green-500 text-white px-4 py-2 rounded-md">
+                  <button onClick={() => handleUpvote(prompt.id)} className="bg-green-500 text-white px-4 py-2 rounded-md">
                     Upvote ({formatNumber(prompt.upvotes)})
                   </button>
                 </div>

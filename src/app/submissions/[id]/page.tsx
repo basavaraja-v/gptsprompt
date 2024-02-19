@@ -27,6 +27,7 @@ const SubmissionsPage = () => {
         try {
             const promptRef = doc(db, 'challenge_prompts', promptId);
             await updateDoc(promptRef, { upvotes: increment(1) });
+            alert('Upvoted!')
         } catch (err) {
             console.error("Upvote Error:", err);
         }
