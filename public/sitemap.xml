@@ -9,17 +9,19 @@
     <priority>1.0</priority>
   </url>
 
-  <url>
-    <loc>https://gptsprompt.heyidb.com/challenges</loc>
-    <lastmod>2024-02-17</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-
+  <!-- Prompts Page -->
   <url>
     <loc>https://gptsprompt.heyidb.com/prompts</loc>
     <lastmod>2024-02-17</lastmod>
     <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Challenges Page -->
+  <url>
+    <loc>https://gptsprompt.heyidb.com/challenges</loc>
+    <lastmod>2024-02-17</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
@@ -38,8 +40,5 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-
-  <!-- Other Pages -->
-  <!-- Add more URLs for other pages on your website as needed -->
 
 </urlset>
