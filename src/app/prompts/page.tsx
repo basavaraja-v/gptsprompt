@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { app } from '../firebase/config';
-import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, increment } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, doc, getDoc, updateDoc, increment, arrayUnion } from 'firebase/firestore';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import useAuth from '../hooks/useauth'; // Assuming you have a hook named useAuth
 
 interface Prompt {
   id: string;
@@ -27,6 +28,7 @@ const PromptsPage = () => {
   const promptsRef = collection(db, 'challenge_prompts');
   const usersRef = collection(db, 'users');
   const [loading, setLoading] = useState<boolean>(true);
+  const { user } = useAuth(); // Obtain user once at the beginning of the component
 
   const formatNumber = (num: number): string => {
     const absNum = Math.abs(num);
@@ -44,11 +46,18 @@ const PromptsPage = () => {
     return num.toString();
   };
 
-  const handleUpvote = async (promptId: string) => {
+  const handleUpvote = async (promptId: string, userId: string) => {
     try {
-      const promptRef = doc(db, 'challenge_prompts', promptId);
-      await updateDoc(promptRef, { upvotes: increment(1) });
-      alert('Upvoted!')
+      if (user) {
+        if (user.uid !== userId) {
+          const promptRef = doc(db, 'challenge_prompts', promptId);
+          await updateDoc(promptRef, {
+            upvotes: increment(1),
+            upvote_users: arrayUnion(userId)
+          });
+          alert('Upvoted!')
+        }
+      }
     } catch (err) {
       console.error("Upvote Error:", err);
     }
@@ -108,7 +117,7 @@ const PromptsPage = () => {
                     <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2">Copy</button>
                   </CopyToClipboard>
 
-                  <button onClick={() => handleUpvote(prompt.id)} className="bg-green-500 text-white px-4 py-2 rounded-md">
+                  <button onClick={() => handleUpvote(prompt.id, prompt.userId)} className="bg-green-500 text-white px-4 py-2 rounded-md">
                     Upvote ({formatNumber(prompt.upvotes)})
                   </button>
                 </div>

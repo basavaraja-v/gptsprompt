@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { app } from '../../firebase/config'; // Assuming your Firebase configuration
-import { getFirestore, collection, getDocs, where, doc, getDoc, updateDoc, increment, query } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, where, doc, getDoc, updateDoc, increment, query, arrayUnion } from 'firebase/firestore';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import useAuth from '../../hooks/useauth'; // Assuming you have a hook named useAuth
 
 interface Prompt {
     id: string;
@@ -14,6 +15,7 @@ interface Prompt {
     promptType: string; // New property for promptType
 }
 
+
 const SubmissionsPage = () => {
     const pathname = window.location.pathname;
     const id = pathname.split('/').pop();
@@ -22,12 +24,20 @@ const SubmissionsPage = () => {
     const db = getFirestore(app);
     const promptsRef = collection(db, 'challenge_prompts');
     const usersRef = collection(db, 'users');
+    const { user } = useAuth(); // Obtain user once at the beginning of the component
 
-    const handleUpvote = async (promptId: string) => {
+    const handleUpvote = async (promptId: string, userId: string) => {
         try {
-            const promptRef = doc(db, 'challenge_prompts', promptId);
-            await updateDoc(promptRef, { upvotes: increment(1) });
-            alert('Upvoted!')
+            if (user) {
+                if (user.uid !== userId) {
+                    const promptRef = doc(db, 'challenge_prompts', promptId);
+                    await updateDoc(promptRef, {
+                        upvotes: increment(1),
+                        upvote_users: arrayUnion(userId)
+                    });
+                    alert('Upvoted!')
+                }
+            }
         } catch (err) {
             console.error("Upvote Error:", err);
         }
@@ -98,7 +108,7 @@ const SubmissionsPage = () => {
                                     <CopyToClipboard text={prompt.prompt} onCopy={() => alert('Copied!')}>
                                         <button className="bg-blue-500 text-white px-4 py-2 rounded-md mr-2">Copy</button>
                                     </CopyToClipboard>
-                                    <button onClick={() => handleUpvote(prompt.id)} className="bg-green-500 text-white px-4 py-2 rounded-md">
+                                    <button onClick={() => handleUpvote(prompt.id, prompt.userId)} className="bg-green-500 text-white px-4 py-2 rounded-md">
                                         Upvote ({formatNumber(prompt.upvotes)})
                                     </button>
                                 </div>
